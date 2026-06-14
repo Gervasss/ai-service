@@ -46,13 +46,13 @@ app.add_middleware(
 
 
 SYSTEM_PROMPT = """
-Voce e o assistente da SI - Solucoes Imobiliarias, integrado a um CRM de leads.
-Responda em portugues do Brasil, com orientacao pratica para corretores e gestores.
-Ajude a priorizar leads, sugerir follow-ups, organizar proximas acoes e interpretar
-informacoes de imoveis e pipeline. Seja objetivo e nao invente dados ausentes.
+Você é o assistente da SI - Soluções Imobiliárias, integrado a um CRM de leads.
+Responda em português do Brasil, com orientação prática para corretores e gestores.
+Ajude a priorizar leads, sugerir follow-ups, organizar próximas ações e interpretar
+informações de imóveis e pipeline. Seja objetivo e não invente dados ausentes.
 Quando o contexto tiver matchedCrm, use esse recorte primeiro para resolver cliente,
-lead e imovel citados na conversa. Se matchedCrm trouxer um unico lead compativel,
-responda sobre ele sem pedir nova confirmacao.
+lead e imóvel citados na conversa. Se matchedCrm trouxer um único lead compatível,
+responda sobre ele sem pedir nova confirmação.
 """.strip()
 
 
@@ -81,7 +81,7 @@ async def chat_with_openai(payload: ChatRequest) -> str:
         messages.append(
             {
                 "role": "system",
-                "content": f"Contexto disponivel no CRM:\n{payload.context}",
+                "content": f"Contexto disponível no CRM:\n{payload.context}",
             }
         )
 
@@ -118,37 +118,37 @@ def build_local_reply(payload: ChatRequest) -> str:
 
     if has_any(text, ["priorizar", "prioridade", "quais leads", "hoje"]):
         return (
-            "Para priorizar hoje, comece pelos leads com proximo contato vencendo ou ja vencido, "
+            "Para priorizar hoje, comece pelos leads com próximo contato vencendo ou já vencido, "
             "valor mais alto e status mais perto de fechamento. Depois revise quem tem telefone "
-            "e observacoes completas, porque esses contatos tendem a destravar mais rapido.\n\n"
+            "e observações completas, porque esses contatos tendem a destravar mais rápido.\n\n"
             f"{summarize_context(context)}"
         )
 
     if has_any(text, ["mensagem", "whatsapp", "follow", "retorno", "contato"]):
         return (
-            "Sugestao de abordagem: 'Ola, tudo bem? Passei para saber se o imovel ainda faz "
-            "sentido para voce e se posso te ajudar com alguma informacao: valores, visita ou "
-            "opcoes parecidas. Qual melhor horario para falarmos hoje?'\n\n"
-            "Se o lead ja demonstrou urgencia, ofereca dois horarios especificos para visita."
+            "Sugestão de abordagem: 'Olá, tudo bem? Passei para saber se o imóvel ainda faz "
+            "sentido para você e se posso te ajudar com alguma informação: valores, visita ou "
+            "opções parecidas. Qual melhor horário para falarmos hoje?'\n\n"
+            "Se o lead já demonstrou urgência, ofereça dois horários específicos para visita."
         )
 
     if has_any(text, ["imovel", "apartamento", "casa", "valor", "preco"]):
         return (
-            "Ao falar do imovel, conecte tres pontos: necessidade do cliente, diferencial do "
-            "imovel e proxima acao. Exemplo: perfil familiar combina com quartos/area; investidor "
-            "valoriza liquidez, localizacao e margem de negociacao."
+            "Ao falar do imóvel, conecte três pontos: necessidade do cliente, diferencial do "
+            "imóvel e próxima ação. Exemplo: perfil familiar combina com quartos/área; investidor "
+            "valoriza liquidez, localização e margem de negociação."
         )
 
     if has_any(text, ["status", "kanban", "funil", "pipeline"]):
         return (
-            "Use o Kanban como rotina diaria: novos leads precisam de primeiro contato rapido, "
-            "leads em negociacao precisam de uma proxima acao registrada, e leads parados devem "
-            "receber tentativa final ou mudanca de status para manter o funil limpo."
+            "Use o Kanban como rotina diária: novos leads precisam de primeiro contato rápido, "
+            "leads em negociação precisam de uma próxima ação registrada, e leads parados devem "
+            "receber tentativa final ou mudança de status para manter o funil limpo."
         )
 
     return (
-        "Posso ajudar a analisar leads, sugerir proximo contato, montar mensagens para clientes "
-        "e organizar prioridades do funil imobiliario. Me diga qual lead, status ou objetivo voce "
+        "Posso ajudar a analisar leads, sugerir próximo contato, montar mensagens para clientes "
+        "e organizar prioridades do funil imobiliário. Me diga qual lead, status ou objetivo você "
         "quer trabalhar agora."
     )
 
@@ -159,13 +159,13 @@ def has_any(text: str, terms: list[str]) -> bool:
 
 def summarize_context(context: str) -> str:
     if not context:
-        return "Se quiser uma recomendacao mais precisa, envie o nome do lead, status, valor e data de proximo contato."
+        return "Se quiser uma recomendação mais precisa, envie o nome do lead, status, valor e data de próximo contato."
 
     lead_count = len(re.findall(r"\bLead:", context, flags=re.IGNORECASE))
     if lead_count:
-        return f"Pelo contexto recebido, encontrei {lead_count} lead(s) para considerar na analise."
+        return f"Pelo contexto recebido, encontrei {lead_count} lead(s) para considerar na análise."
 
-    return "Use os dados do CRM como apoio: status atual, valor estimado, origem e proximo follow-up."
+    return "Use os dados do CRM como apoio: status atual, valor estimado, origem e próximo follow-up."
 
 
 def parse_context(context: str) -> dict:
@@ -195,21 +195,21 @@ def build_matched_lead_reply(lead: dict) -> str:
     imovel = lead.get("imovel") if isinstance(lead.get("imovel"), dict) else {}
     contact_name = lead.get("contactName") or "cliente"
     status_name = status.get("name") or "sem status cadastrado"
-    imovel_title = imovel.get("title") or lead.get("company") or "imovel nao informado"
-    next_follow_up = lead.get("nextFollowUp") or "nao cadastrado"
-    notes = lead.get("notes") or "sem observacoes cadastradas"
-    value = lead.get("value") or imovel.get("price") or "nao cadastrado"
+    imovel_title = imovel.get("title") or lead.get("company") or "imóvel não informado"
+    next_follow_up = lead.get("nextFollowUp") or "não cadastrado"
+    notes = lead.get("notes") or "sem observações cadastradas"
+    value = lead.get("value") or imovel.get("price") or "não cadastrado"
 
     return (
-        f"Para o cliente {contact_name}, relacionado ao imovel {imovel_title}, "
-        f"o proximo passo deve considerar o status atual: {status_name}.\n\n"
+        f"Para o cliente {contact_name}, relacionado ao imóvel {imovel_title}, "
+        f"o próximo passo deve considerar o status atual: {status_name}.\n\n"
         f"Dados do CRM:\n"
         f"- Status: {status_name}\n"
         f"- Valor: {value}\n"
-        f"- Proximo contato: {next_follow_up}\n"
-        f"- Observacoes: {notes}\n\n"
-        "Acao recomendada: entre em contato com o cliente usando o contexto do imovel, "
-        "confirme se o interesse continua ativo e registre uma proxima acao objetiva no CRM "
+        f"- Próximo contato: {next_follow_up}\n"
+        f"- Observações: {notes}\n\n"
+        "Ação recomendada: entre em contato com o cliente usando o contexto do imóvel, "
+        "confirme se o interesse continua ativo e registre uma próxima ação objetiva no CRM "
         "(visita, proposta, envio de detalhes ou follow-up com data definida)."
     )
 
